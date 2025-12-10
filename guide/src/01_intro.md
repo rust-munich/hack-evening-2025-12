@@ -1,4 +1,5 @@
 # Introduction
+[the original AoC challenge](https://adventofcode.com/2025/day/4)
 
 --- Day 4: Printing Department ---
 
