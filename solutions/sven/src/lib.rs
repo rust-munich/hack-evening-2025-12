@@ -140,4 +140,11 @@ mod tests {
 
         assert_eq!(g.paperolls().count(), 13);
     }
+
+    #[test]
+    fn test_input_final() {
+        let g = Grid::new(include_str!("../../../input.txt"));
+        let paperrolls = g.paperolls().count();
+        println!("Paperolls = {paperrolls}");
+    }
 }
