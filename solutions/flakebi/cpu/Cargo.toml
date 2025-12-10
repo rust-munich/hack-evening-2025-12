@@ -1,0 +1,10 @@
+[package]
+name = "cpu"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+hip-runtime-sys = "0.1"
+rand = "0.9"
