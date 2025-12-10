@@ -2,7 +2,7 @@
 
 ## Data loading
 
-the .input.txt file can be loaded 
+The [input.txt](https://raw.githubusercontent.com/rust-munich/hack-evening-2025-12/refs/heads/main/input.txt) data is available for no AoC account holders.
 
 - [std lib io api](https://doc.rust-lang.org/std/io/index.html) with `File::open` and `BufReader::new(file).lines()`
 - `include_str!` macro to include the file as a `&'static str` ([docs](https://doc.rust-lang.org/std/macro.include_str.html))
