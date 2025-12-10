@@ -5,7 +5,7 @@ use std::{
 };
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let file = File::open("/Volumes/CaseSensititve/SourcesCS/rust-munich-2/rust_munich_input.txt")?;
+    let file = File::open("../../input.txt")?;
     let reader = BufReader::new(file);
 
     let mut lines: Vec<Vec<u8>> = vec![];
