@@ -68,31 +68,33 @@ fn find_all_neighbors(
 ) -> Vec<u8> {
     let mut neighbors: Vec<u8> = vec![];
 
-    for line_offset in -1i32..=1 {
-        if line_offset + (line_index as i32) < 0 {
-            continue;
-        }
-        let y = ((line_index as i32) + line_offset) as usize;
+    for line_offset in -1isize..=1 {
+        let y = match line_index.checked_add_signed(line_offset) {
+            Some(y) => y,
+            None => continue,
+        };
         if y >= lines.len() {
             continue;
         }
 
-        for column_offset in -1i32..=1 {
+        let line = &lines[y];
+
+        for column_offset in -1isize..=1 {
             if line_offset == 0 && column_offset == 0 {
                 // do not count the item itself
                 continue;
             }
 
-            if column_offset + (char_index as i32) < 0 {
-                continue;
-            }
-            let x = (char_index as i32 + column_offset) as usize;
+            let x = match char_index.checked_add_signed(column_offset) {
+                Some(x) => x,
+                None => continue,
+            };
 
             if x >= columns {
                 continue;
             }
 
-            neighbors.push(lines[y][x]);
+            neighbors.push(line[x]);
         }
     }
 
