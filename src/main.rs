@@ -1,7 +1,6 @@
 use std::{
     fs::File,
     io::{BufRead, BufReader},
-    ops::Add,
     vec,
 };
 
@@ -12,11 +11,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut lines: Vec<Vec<u8>> = vec![];
     let mut columns = 0;
 
-    for line in reader.lines() {
+    for line in reader.split(b'\n') {
         match line {
             Ok(line) => {
                 columns = line.len();
-                lines.push(line.into_bytes());
+                lines.push(line);
             }
             Err(e) => return Err(e.into()),
         }
