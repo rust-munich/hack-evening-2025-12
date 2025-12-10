@@ -1,12 +1,11 @@
 use std::{
     fs::File,
     io::{BufRead, BufReader},
+    ops::Add,
     vec,
 };
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    println!("Hello, world!");
-
     let file = File::open("/Volumes/CaseSensititve/SourcesCS/rust-munich-2/rust_munich_input.txt")?;
     let reader = BufReader::new(file);
 
@@ -25,7 +24,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let neighbors = count_rolls_with_few_neighbors(lines, columns)?;
 
-    println!("Found {} neighbors", neighbors);
+    println!("Found {} rolls for picking", neighbors);
 
     return Ok(());
 }
@@ -69,59 +68,35 @@ fn find_all_neighbors(
 ) -> Vec<u8> {
     let mut neighbors: Vec<u8> = vec![];
 
-    if line_index > 0 {
-        let previous_line = &lines[line_index - 1];
-        neighbors.append(&mut get_item(
-            &previous_line,
-            neighbor_indices(char_index, true, columns),
-        ));
-    }
+    for line_offset in -1i32..=1 {
+        if line_offset + (line_index as i32) < 0 {
+            continue;
+        }
+        let y = ((line_index as i32) + line_offset) as usize;
+        if y >= lines.len() {
+            continue;
+        }
 
-    let current_line = &lines[line_index];
-    neighbors.append(&mut get_item(
-        &current_line,
-        neighbor_indices(char_index, false, columns),
-    ));
+        for column_offset in -1i32..=1 {
+            if line_offset == 0 && column_offset == 0 {
+                // do not count the item itself
+                continue;
+            }
 
-    if line_index + 1 < lines.len() {
-        let next_line = &lines[line_index + 1];
-        neighbors.append(&mut get_item(
-            &next_line,
-            neighbor_indices(char_index, true, columns),
-        ));
-    }
+            if column_offset + (char_index as i32) < 0 {
+                continue;
+            }
+            let x = (char_index as i32 + column_offset) as usize;
 
-    neighbors
-}
+            if x >= columns {
+                continue;
+            }
 
-fn neighbor_indices(char_index: usize, include_self: bool, columns: usize) -> Vec<usize> {
-    let mut indices: Vec<usize> = vec![];
-
-    if char_index > 0 {
-        indices.push(char_index - 1);
-    }
-
-    if include_self {
-        indices.push(char_index);
-    }
-
-    if char_index + 1 < columns {
-        indices.push(char_index + 1);
-    }
-
-    indices
-}
-
-fn get_item(line: &Vec<u8>, indices: Vec<usize>) -> Vec<u8> {
-    let mut result: Vec<u8> = vec![];
-
-    for index in indices {
-        if index < line.len() {
-            result.push(line[index]);
+            neighbors.push(lines[y][x]);
         }
     }
 
-    result
+    neighbors
 }
 
 #[cfg(test)]
