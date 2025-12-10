@@ -9,19 +9,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let reader = BufReader::new(file);
 
     let mut lines: Vec<Vec<u8>> = vec![];
-    let mut columns = 0;
 
     for line in reader.split(b'\n') {
         match line {
             Ok(line) => {
-                columns = line.len();
                 lines.push(line);
             }
             Err(e) => return Err(e.into()),
         }
     }
 
-    let neighbors = count_rolls_with_few_neighbors(lines, columns)?;
+    let neighbors = count_rolls_with_few_neighbors(lines)?;
 
     println!("Found {} rolls for picking", neighbors);
 
@@ -33,14 +31,13 @@ const ROLL: u8 = b'@';
 // Count paper rolls that have fewer than 4 neighboring paper rolls (8-directional adjacency)
 fn count_rolls_with_few_neighbors(
     lines: Vec<Vec<u8>>,
-    columns: usize,
 ) -> Result<usize, Box<dyn std::error::Error>> {
     let mut rolls_with_few_neighbors = 0;
 
     for (line_index, line) in lines.iter().enumerate() {
         for (char_index, char) in line.iter().enumerate() {
             if char == &ROLL {
-                let neighbors = find_all_neighbors(&lines, columns, line_index, char_index)
+                let neighbors = find_all_neighbors(&lines, line_index, char_index)
                     .into_iter()
                     .filter(|neighbor| *neighbor == ROLL)
                     .count();
@@ -59,12 +56,7 @@ fn count_rolls_with_few_neighbors(
     return Ok(rolls_with_few_neighbors);
 }
 
-fn find_all_neighbors(
-    lines: &Vec<Vec<u8>>,
-    columns: usize,
-    line_index: usize,
-    char_index: usize,
-) -> Vec<u8> {
+fn find_all_neighbors(lines: &Vec<Vec<u8>>, line_index: usize, char_index: usize) -> Vec<u8> {
     let mut neighbors: Vec<u8> = vec![];
 
     for line_offset in -1isize..=1 {
@@ -89,7 +81,7 @@ fn find_all_neighbors(
                 None => continue,
             };
 
-            if x >= columns {
+            if x >= line.len() {
                 continue;
             }
 
@@ -106,14 +98,11 @@ mod tests {
 
     #[test]
     fn test_1() -> Result<(), Box<dyn std::error::Error>> {
-        let neighbors = count_rolls_with_few_neighbors(
-            vec![
-                "...".as_bytes().to_vec(),
-                "...".as_bytes().to_vec(),
-                "...".as_bytes().to_vec(),
-            ],
-            3,
-        )?;
+        let neighbors = count_rolls_with_few_neighbors(vec![
+            "...".as_bytes().to_vec(),
+            "...".as_bytes().to_vec(),
+            "...".as_bytes().to_vec(),
+        ])?;
 
         assert_eq!(neighbors, 0);
 
@@ -122,14 +111,11 @@ mod tests {
 
     #[test]
     fn test_2() -> Result<(), Box<dyn std::error::Error>> {
-        let neighbors = count_rolls_with_few_neighbors(
-            vec![
-                "@..".as_bytes().to_vec(),
-                "...".as_bytes().to_vec(),
-                "..@".as_bytes().to_vec(),
-            ],
-            3,
-        )?;
+        let neighbors = count_rolls_with_few_neighbors(vec![
+            "@..".as_bytes().to_vec(),
+            "...".as_bytes().to_vec(),
+            "..@".as_bytes().to_vec(),
+        ])?;
 
         assert_eq!(neighbors, 2);
 
@@ -138,14 +124,11 @@ mod tests {
 
     #[test]
     fn test_3() -> Result<(), Box<dyn std::error::Error>> {
-        let neighbors = count_rolls_with_few_neighbors(
-            vec![
-                "@..".as_bytes().to_vec(),
-                "@@@".as_bytes().to_vec(),
-                "@@.".as_bytes().to_vec(),
-            ],
-            3,
-        )?;
+        let neighbors = count_rolls_with_few_neighbors(vec![
+            "@..".as_bytes().to_vec(),
+            "@@@".as_bytes().to_vec(),
+            "@@.".as_bytes().to_vec(),
+        ])?;
 
         assert_eq!(neighbors, 3);
 
