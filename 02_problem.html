@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-18a490f5.js";
+            window.path_to_searchindex_js = "searchindex-220cb705.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-bff82389.js"></script>
@@ -199,23 +199,32 @@
 </code></pre>
 <p>Not a @, skip.</p>
 <p>Step 3: (0, 2) → @ ✓</p>
-<pre><code>   .  . [@] @      Neighbors (5 valid, 3 out-of-bounds):
+<pre><code>   .  . [@] @      Neighbors (5 in bounds, 3 out-of-bounds):
    @  @  @  .      ┌─────────────┐
-   @  @  @  @      │ ·  ·  ·     │  · = out of bounds
+   @  @  @  @      │ x  x  x     │  x = out of bounds
                    │ .  ░  @     │  ░ = center (not counted)
-                   │ @  @  @     │
-                   └─────────────┘
-</code></pre>
-<p>Neighbor @ count: 4 → ≥ 4, not accessible</p>
-<p>Step 4: (0, 3) → @ ✓</p>
-<pre><code>   .  .  @ [@]     Neighbors (5 valid):
-   @  @  @  .      ┌─────────────┐
-   @  @  @  @      │ ·  ·  ·     │
-                   │ @  ░  .     │
                    │ @  @  .     │
                    └─────────────┘
 </code></pre>
-<p>Neighbor @ count: 3 → &lt; 4, accessible! ✓</p>
+<p>Neighbor @ count: 3 → &lt; 4, vaild! ✓</p>
+<p>Step 4: (0, 3) → @ ✓</p>
+<pre><code>   .  .  @ [@]     Neighbors (3 in bounds):
+   @  @  @  .      ┌─────────────┐
+   @  @  @  @      │ x  x  x     │
+                   │ @  ░  x     │
+                   │ @  .  x     │
+                   └─────────────┘
+</code></pre>
+<p>Neighbor @ count: 2 → &lt; 4, vaild! ✓</p>
+<p>Step 6: (1, 1) → @ ✓</p>
+<pre><code>   .  .  @  @     Neighbors (8 in bounds):
+   @ [@] @  .      ┌─────────────┐
+   @  @  @  @      │ .  .  @     │
+                   │ @  ░  @     │
+                   │ @  @  @     │
+                   └─────────────┘
+</code></pre>
+<p>Neighbor @ count: 6 → &lt; 4, invalid!</p>
 <p>and so on…</p>
 
                     </main>
