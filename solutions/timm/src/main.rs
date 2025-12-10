@@ -8,16 +8,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let file = File::open("../../input.txt")?;
     let reader = BufReader::new(file);
 
-    let mut lines: Vec<Vec<u8>> = vec![];
-
-    for line in reader.split(b'\n') {
-        match line {
-            Ok(line) => {
-                lines.push(line);
-            }
-            Err(e) => return Err(e.into()),
-        }
-    }
+    let lines = reader.split(b'\n').collect::<Result<Vec<_>, _>>()?;
 
     let neighbors = count_rolls_with_few_neighbors(lines)?;
 
